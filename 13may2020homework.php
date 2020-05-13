@@ -8,16 +8,16 @@ Homework2($myArray);
 Homework3($myArray);
 Homework4($myArray, 1);
 
-function Homework1($array)
+function Homework1(&$array)
 {
     echo "Homework 1: <br> ---------------- <br>";
     //push 0 vao dau
     array_unshift($array, '0');
     echo "mang sau khi them: <br>";
-    print_r($array);
+    print_r($array); 
     echo "<br><br>";
 }
-function Homework2($array)
+function Homework2(&$array)
 {
     echo "Homework 2: <br> ---------------- <br>";
     //push 4 vao cuoi
@@ -27,16 +27,16 @@ function Homework2($array)
     echo "<br><br>";
 }
 
-function Homework3($array)
+function Homework3(&$array)
 {
     echo "Homework 3: <br> ---------------- <br>";
     //dem so phan tu
     echo "so phan tu cua mang: <br>" . count($array);
     echo "<br><br>";
 }
-function Homework4($array, $num)
+function Homework4(&$array, $num)
 {
-    echo "Homework 4: <br> ---------------- <br>";
+    echo "Homework  : <br> ---------------- <br>";
     //xoa phan tu chi dinh
     if (in_array($num, $array)) {
         $key = array_search($num, $array);
