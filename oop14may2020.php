@@ -40,16 +40,17 @@
             return $this;
         }
         
-        function showUserNormal()
+        public function showUserNormal()
         {           
             // Sort and print the resulting array
             usort($this->_listUsers, function ($a, $b) {
                 return $a->getName() <= $b->getName();
             });
             var_dump($this->_listUsers);
+            echo '<br><br>';
         }
 
-        function showUserHard()
+        public function showUserHard()
         {
             usort($this->_listUsers, function($a,$b){
                 $retval = $a->getName()<=$b->getName();
@@ -69,12 +70,12 @@
         protected $name;
         protected $birth_day;
         protected $score;
-        // function __construct($name, $birth_day, $score)
-        // {
-        //     $this->name = $name;
-        //     $this->birth_day = $birth_day;
-        //     $this->score = $score;
-        // }
+        function __construct($name, $birth_day, $score)
+        {
+            $this->name = $name;
+            $this->birth_day = $birth_day;
+            $this->score = $score;
+        }
         function getName()
         {
             return $this->name;
