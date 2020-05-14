@@ -49,7 +49,7 @@ class Manager extends User
         
         
         // Sort and print the resulting array
-        uasort($this->listUsers[], 'cmp');
+        uasort($this->listUsers, 'cmp');
         var_dump($listUsers);
     }
 
