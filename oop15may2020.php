@@ -13,132 +13,171 @@ Tìm kiếm các thí sinh theo số báo danh
 Kết thúc chương trình." -->
 <?php
 class Khoi
-{   
-    protected $khoi;
+{
+    protected $_khoi;
     protected $_diem1;
     protected $_diem2;
     protected $_diem3;
-    
-    public function __construct()
-    {
-        
-    }
-    public function setKhoi($_khoi)
-    {
-        $this->khoi = $_khoi;
+    const BAR_A = 15;
+    const BAR_B = 16;
+    const BAR_C = 13.5;
 
-        return $this;
+    public function __construct($khoi, $diem1, $diem2, $diem3)
+    {
+        $this->_khoi = $khoi;
+        $this->_diem1 = $diem1;
+        $this->_diem2 = $diem2;
+        $this->_diem3 = $diem3;
+    }
+    public function setKhoi($khoi)
+    {
+        $this->_khoi = $khoi;
     }
 
     public function getKhoi()
     {
-        return $this->khoi;
-    }public function setDiem1($_diem1)
+        return $this->_khoi;
+    }
+    public function setDiem1($diem1)
     {
-        $this->diem1 = $_diem1;
-
-        return $this;
+        $this->_diem1 = $diem1;
     }
 
     public function getDiem1()
     {
-        return $this->diem1;
+        return $this->_diem1;
     }
-    public function setDiem2($_diem2)
+    public function setDiem2($diem2)
     {
-        $this->diem2 = $_diem2;
-
-        return $this;
+        $this->_diem2 = $diem2;
     }
 
     public function getDiem2()
     {
-        return $this->diem2;
+        return $this->_diem2;
     }
-    public function setDiem3($_diem3)
+    public function setDiem3($diem3)
     {
-        $this->diem3 = $_diem3;
-
-        return $this;
+        $this->_diem3 = $diem3;
     }
 
     public function getDiem3()
     {
-        return $this->diem3;
+        return $this->_diem3;
     }
-
 }
 
 class ThiSinh extends Khoi
 {
-    
-    protected $sbd;
-    protected $name;
-    protected $add;
-    protected $bonus;
 
-    function __construct($sbd, $name, $add, $bonus)
+    protected $_sbd;
+    protected $_name;
+    protected $_addr;
+    protected $_bonus;
+
+    function __construct($sbd, $name, $addr, $bonus, $khoi, $diem1, $diem2, $diem3)
     {
-        $this->sbd = $sbd;
-        $this->name = $name;
-        $this->add = $add;
-        $this->bonus = $bonus;
+        $this->_sbd = $sbd;
+        $this->_name = $name;
+        $this->_addr = $addr;
+        $this->_bonus = $bonus;
+        $this->_khoi = $khoi;
+        $this->_diem1 = $diem1;
+        $this->_diem2 = $diem2;
+        $this->_diem3 = $diem3;
     }
     function getSbd()
     {
-        return $this->sbd;
+        return $this->_sbd;
     }
     function setSbd($sbd)
     {
-        $this->sbd = $sbd;
+        $this->_sbd = $sbd;
     }
     function getName()
     {
-        return $this->name;
+        return $this->_name;
     }
     function setName($name)
     {
-        $this->name = $name;
+        $this->_name = $name;
     }
-    function getAdd()
+    function getAddr()
     {
-        return $this->add;
+        return $this->_addr;
     }
-    function setAdd($add)
+    function setAddr($addr)
     {
-        $this->add = $add;
+        $this->_addr = $addr;
     }
     function getBonus()
     {
-        return $this->bonus;
+        return $this->_bonus;
     }
-    function setBonus($bonus) 
+    function setBonus($bonus)
     {
-        $this->bonus = $bonus;
+        $this->_bonus = $bonus;
     }
-
 }
-class TuyenSinh{
-    protected $_listThiSinh;
+class TuyenSinh
+{
+    protected $_danhSachThiSinh = [];
     function __construct()
     {
-        
     }
     public function add($thiSinh)
     {
-        foreach ($thiSinh as $ts){
-                $this->_listThiSinh[] = new ThiSinh($ts[0],$ts[1],$ts[2],$ts[3],$ts[4],$ts[5],$ts[6],$ts[7]);
+        foreach ($thiSinh as $ts) {
+            $this->_danhsachThiSinh[] = new ThiSinh($ts[0], $ts[1], $ts[2], $ts[3], $ts[4], $ts[5], $ts[6], $ts[7]); //
         }
-        var_dump($this->_listThiSinh);
+        return $this;
     }
     public function show()
     {
-        var_dump($this->_listThiSinh);
+        $result = array();
+        foreach ($this->_danhSachThiSinh as $index => $ts) {
+
+            switch ($index->getKhoi()) {
+                case 'A':
+                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_A) {
+                        $result[] = $this->_danhSachThiSinh[$index];
+                    }
+                    break;
+                case 'B':
+                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_B) {
+                        $result[] = $this->_danhSachThiSinh[$index];
+                    }
+                    break;
+                case 'C':
+                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_C) {
+                        $result[] = $this->_danhSachThiSinh[$index];
+                    }
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+        print_r($result);
+    }
+    public function search($query)
+    {
+        // print_r($this->_danhsachThiSinh);
+        $result = array();
+        foreach ($this->_danhSachThiSinh as $key => $ts) {
+            if (stristr($ts->getName(), $query)) {
+                $result[] = $this->_danhSachThiSinh[$key];
+            }
+        }
+        print_r($result);
     }
 }
-
-$thiSinh=[134,'nguyen van A','13a 3b',0.4,'Khoi B',6,6,5];
+$thiSinh = [
+    [134, 'nguyen van A', '13a 3b', 0.4, 'C', 6, 7, 6],
+    [133, 'le van B', '65 65', 0, 'A', 8, 8, 8]
+];
 $tuyenSinh = new TuyenSinh();
 $tuyenSinh->add($thiSinh);
-// $tuyenSinh->show();
+$tuyenSinh->show();
+$tuyenSinh->search('B');
 ?>
