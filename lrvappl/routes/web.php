@@ -13,8 +13,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/hello', function () {
-echo 'helloworld';});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::get('/hello', function () {
+//     return view('pages.hello');
+// });
+
+// Route::get('/users/{id}/{user}', function ($user,$id) {
+//     return 'this is user '.$user.' with id of '.$id;
+// });
+
+// Route::get('/index', function () {
+//     return 'pages.index';
+// });
+
+// Route::get('/about', function () {
+//     return 'pages.about';
+// });
+
+// Route::get('/services', function () {
+//     return 'pages.services';
+// });
+
+Route::get('/','PagesController#@index');
+Route::get('/about','PagesController#@about');
+Route::get('/services','PagesController#@services');
+

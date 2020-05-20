@@ -30,18 +30,21 @@
     class Manager
     {
         protected $_listUsers = [];
+        function __construct()
+        {
+        }
 
 
         public function addUsers($users)
         {
             foreach ($users as $user) {
-                $this->_listUsers[] = new User($user[0], $user[1], $user[2]); // Ý tưởng
+                $this->_listUsers[] = new User($user[0], $user[1], $user[2]);
             }
             return $this;
         }
-        
+
         public function showUserNormal()
-        {           
+        {
             // Sort and print the resulting array
             usort($this->_listUsers, function ($a, $b) {
                 return $a->getName() <= $b->getName();
@@ -52,19 +55,65 @@
 
         public function showUserHard()
         {
-            usort($this->_listUsers, function($a,$b){
-                $retval = $a->getName()<=$b->getName();
+            usort($this->_listUsers, function ($a, $b) {
+                $retval = $a->getName() <= $b->getName();
                 if ($retval == 0) {
-                    $retval = $a->getBirthday()<= $b->getBirthday();
-                } if ($retval ==0){
+                    $retval = $a->getBirthday() <= $b->getBirthday();
+                }
+                if ($retval == 0) {
                     $retval = $a->getScore() <= $b->getScore();
                 }
                 return $retval;
             });
             var_dump($this->_listUsers);
+            // var_dump($this->_listUsers[1]);
+        }
+
+        public function search($query, $mode)
+        {
+            $result = array();
+            foreach ($this->_listUsers as $user) {
+                // var_dump($user->getName());
+                // echo strpos($user->getName(),$query);
+                switch ($mode) {
+                    case 1:
+                        if (stristr($user->getName(), $query)) {
+                            $result[] = (object) $user;
+                        }
+
+                        break;
+                    case 2:
+                        if (stristr($user->getBirthday(), $query)) {
+                            $result[] = (object) $user;
+                        }
+
+                        break;
+                    case 3:
+                        if (stristr($user->getScore(), $query)) {
+                            $result[] = (object) $user;
+                        }
+
+                        break;
+                    default:
+                        echo "please reinput mode in range of 1 2 3";
+                }
+                // if (stristr($user->getName(), $query)) {
+                //     $result[] = (object) $user;
+                // }
+            }
+            var_dump($result);
+        }
+
+        public function remove($query)
+        {
+            foreach ($this->_listUsers as $index=>$user) {
+                if (stristr($user->getName(), $query)) {
+                    unset($this->_listUsers[$index]);
+                }
+            }
+            var_dump($this->_listUsers);
         }
     }
-
     class User
     {
         protected $name;
@@ -116,16 +165,17 @@
 
     // usort($users, build_sorter('score'));
     $users = [
-        ['a', '05-12-2000', '100'],
-        ['b', '05-12-2001', '100'],
-        ['c', '05-12-2000', '99'],
-        ['b', '05-12-2000', '99'],
-        ['d', '05-12-1999', '98']
+        ['nguyen van a', '05-12-2000', '100'],
+        ['le van b', '05-12-2001', '100'],
+        ['nguyen thi c', '05-12-2000', '99'],
+        ['ngo van b', '05-12-2000', '99'],
+        ['doan chi d', '05-12-1999', '98']
     ];
     $manager = new Manager();
     $manager->addUsers($users);
-    $manager->showUserNormal();
-    $manager->showUserHard();
-
+    // $manager->showUserNormal();
+    // $manager->showUserHard();
+    // $manager->search('Ng',1);
+    $manager->remove('thi');
 
     ?>

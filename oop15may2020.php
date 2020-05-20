@@ -128,7 +128,7 @@ class TuyenSinh
     public function add($thiSinh)
     {
         foreach ($thiSinh as $ts) {
-            $this->_danhsachThiSinh[] = new ThiSinh($ts[0], $ts[1], $ts[2], $ts[3], $ts[4], $ts[5], $ts[6], $ts[7]); //
+            $this->_danhSachThiSinh[] = new ThiSinh($ts[0], $ts[1], $ts[2], $ts[3], $ts[4], $ts[5], $ts[6], $ts[7]); //
         }
         return $this;
     }
@@ -137,19 +137,19 @@ class TuyenSinh
         $result = array();
         foreach ($this->_danhSachThiSinh as $index => $ts) {
 
-            switch ($index->getKhoi()) {
+            switch ($ts->getKhoi()) {
                 case 'A':
-                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_A) {
+                    if ($ts->getDiem1() + $ts->getDiem2() + $ts->getDiem3() + $ts->getBonus() >= Khoi::BAR_A) {
                         $result[] = $this->_danhSachThiSinh[$index];
                     }
                     break;
                 case 'B':
-                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_B) {
+                    if ($ts->getDiem1() + $ts->getDiem2() + $ts->getDiem3() + $ts->getBonus() >= Khoi::BAR_B) {
                         $result[] = $this->_danhSachThiSinh[$index];
                     }
                     break;
                 case 'C':
-                    if ($ts->getDiem1 + $ts->getDiem2 + $ts->getDiem3 + $ts->getBonus >= Khoi::BAR_C) {
+                    if ($ts->getDiem1() + $ts->getDiem2() + $ts->getDiem3() + $ts->getBonus() >= Khoi::BAR_C) {
                         $result[] = $this->_danhSachThiSinh[$index];
                     }
                     break;
@@ -159,6 +159,7 @@ class TuyenSinh
             }
         }
         print_r($result);
+            return $this;
     }
     public function search($query)
     {
@@ -170,6 +171,7 @@ class TuyenSinh
             }
         }
         print_r($result);
+        return $this;
     }
 }
 $thiSinh = [

@@ -33,6 +33,7 @@ $numbers = array("lessthan10" => array(1,2,3,4,5,6,7,8,9),
 
     function Homework3 ($array){
         echo "Homework 3: <br> ---------------- <br>";
+        //array_sum($numbers['lessthan10']) + array_sum($numbers['lessthan20']);
         $Sum =0;
         foreach($array as $key => $value){
             foreach($value as $k => $v){
