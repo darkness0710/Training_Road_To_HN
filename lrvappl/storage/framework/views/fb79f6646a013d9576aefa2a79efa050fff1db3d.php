@@ -2,9 +2,9 @@
     <h1><?php echo e($title); ?></h1>
     <p>72 phep than thong nhu Ton Ngo Khong</p>
     <?php if(count($services)>0): ?>
-    <ul>  
+    <ul class="list-group">  
         <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <li><?php echo e($service); ?></li>
+            <li class="list-group-item"><?php echo e($service); ?></li>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     </ul>
