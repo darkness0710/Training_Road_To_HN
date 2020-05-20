@@ -37,7 +37,9 @@ use Illuminate\Support\Facades\Route;
 //     return 'pages.services';
 // });
 
-Route::get('/','PagesController#@index');
-Route::get('/about','PagesController#@about');
-Route::get('/services','PagesController#@services');
-
+// Route::get('/',function(){
+//     return view('welcome');
+// });
+Route::get('/', 'PagesController@about');
+Route::get('/about', 'PagesController@about');
+Route::get('/services', 'PagesController@services');

@@ -6,15 +6,20 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    public function index () {
+    public function index()
+    {
         return view('pages.index');
     }
-    
-    public function about () {
+
+    public function about()
+    {
         return view('pages.about');
     }
-
-    public function services () {
+    
+    public function services()
+    {
         return view('pages.services');
     }
+  
+    
 }
