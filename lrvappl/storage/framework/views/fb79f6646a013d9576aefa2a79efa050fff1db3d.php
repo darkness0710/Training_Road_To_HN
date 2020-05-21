@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
     <h1><?php echo e($title); ?></h1>
     <p>72 phep than thong nhu Ton Ngo Khong</p>
