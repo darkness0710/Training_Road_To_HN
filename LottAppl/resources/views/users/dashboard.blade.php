@@ -16,13 +16,13 @@
 
                     <p>You are logged in!</p>
                     <p> Hello {{Auth::user()->name}}</p>
+                    <div>
                     @if (Auth::user()->is_admin)
                         <p>you're admin!</p>
-                        <div>
-                            <a href="/users" class="btn btn-primary">Manage Users</a>
-                            <a href="/lottery" class ="btn btn-primary">Manage Lottery</a>
-                        </div>
+                            <a href="/users" class="btn btn-primary">View Users</a>
                     @endif
+                    <a href="/lottery" class ="btn btn-primary">View Lottery</a>
+                    </div>
                 </div>
             </div>
         </div>

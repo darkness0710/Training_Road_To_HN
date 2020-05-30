@@ -31,7 +31,7 @@
                 <td>{{$lott->result}}</td>
                 @if (Auth::user()->is_admin)
                 <td>
-                    {{Form::open(['route'=>['lottery.edit',$lott->id],'method'=>'POST','onsubmit'=>'return confirm("Ban this user?")'])}}
+                    {{Form::open(['route'=>['lottery.edit',$lott->id],'method'=>'GET'])}}
                     {{Form::submit('Edit',['class'=>'btn btn-danger'])}}
                     {{Form::close()}}
                 </td>

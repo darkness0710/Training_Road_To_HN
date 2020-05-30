@@ -11,7 +11,7 @@ class LotteryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index']]);
+        $this->middleware('auth', ['except' => ['index','show']]);
     }
     public function index()
     {
@@ -35,30 +35,30 @@ class LotteryController extends Controller
         $lott->result = $request->input('result');
         // $lott->user_id =auth()->user()->id;
         $lott->save();
-        return redirect('lottery.index')->with('success', $lott->date . ' Result added');
+        return redirect()->route('lottery.index')->with('success', $lott->date . ' Result added');
     }
     public function show($id)
     {
         $lott = Lottery::find($id);
-        return view('lottery.show', ['lott', $lott]);
+        return view('lottery.show', ['lott'=> $lott]);
     }
     public function edit($id)
     {
         $lott = Lottery::find($id);
         return view('lottery.edit')->with('lott', $lott);
     }
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
         $this->validate($request, [
             'date' => 'required',
             'result' => 'required'
         ]);
-        $lott = new Lottery;
+        $lott = Lottery::find($id);
         $lott->date = $request->input('date');
         $lott->result = $request->input('result');
         // $lott->user_id =auth()->user()->id;
         $lott->save();
-        return redirect('lottery.index')->with('success', $lott->date . ' Result modified');
+        return redirect()->route('lottery.index')->with('success', $lott->date . ' modified');
     }
     public function delete($id)
     {

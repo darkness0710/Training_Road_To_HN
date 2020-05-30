@@ -21,12 +21,20 @@ class UserController extends Controller
     }
     public function search(Request $request)
     {
-        // $users = DB::table('users')->orderBy('name')->get();
-        // return view('userManager')->with('users', $users);
+        $search1 = $request->get('search1');
+        $search2 = $request->get('search2');
+        if (empty($search1)) {
+            $users = DB::table('users')->where('email','LIKE','%'.$search2.'%')->get();
+        } else if (empty($search2)) {
+            $users = DB::table('users')->where('name', 'LIKE', '%' . $search1 . '%')->get();
+        } else
+            $users = DB::table('users')->where('name', 'LIKE', '%' . $search1 . '%')->where('email', 'LIKE', '%' . $search2 . '%')->get();
+        return view('users.index', ['users' => $users]);
 
-        $search = $request->get('search');
-        $users = DB::table('users')->where('name','LIKE','%'.$search.'%')->get();
-        return view('users.index',['users'=>$users]);
+        // $search = $request->get('search1');
+
+        // $users = DB::table('users')->where('name','LIKE','%'.$search.'%')->get();
+        // return view('users.index',['users'=>$users]);
     }
     public function ban($id)
     {   

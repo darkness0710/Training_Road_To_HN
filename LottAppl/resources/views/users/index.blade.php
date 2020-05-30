@@ -9,7 +9,8 @@
 
                 <div class="card-body">
                     {{ Form::open(['route'=>'users.search','method'=>'GET']) }}
-                    {{ Form::text('search','',['placeholder'=>'input query...'])}}
+                    {{ Form::text('search1','',['placeholder'=>'input name...'])}}
+                    {{ Form::text('search2','',['placeholder'=>'input email...'])}}
                     {{ Form::submit('>>', ['class'=>'btn btn-primary'])}}
                     {{ Form::close() }}
                     {{-- <form action="/search" method="GET">
