@@ -15,10 +15,9 @@ class CheckBanned
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->isBannedUntil && now()->lessThan(auth()->user()->isBannedUntil)) {
-            $banned_days = now()->diffInDays(auth()->user()->isBannedUntil);
+        if (auth()->check() && auth()->user()->is_banned) {
             auth()->logout();
-            $message = 'Your account has been suspended for ' . $banned_days . ' day(s). Please contact administrator.';
+            $message = 'Your account has been suspended. Please contact administrator.';
             return redirect()->route('login')->withMessage($message);
         }
 

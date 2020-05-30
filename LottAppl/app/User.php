@@ -16,12 +16,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'isBannedUntil'
+        'name', 'email', 'password',
     ];
 
-    protected $dates = [
-        'isBannedUntil'
-    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -38,5 +35,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        // 'is_admin' => 'boolean',
+        // 'is_banned' => 'boolean',
     ];
+    // public function setIsBannedAttribute($bool)
+    // {
+    //     return $this->attributes['is_banned'] = $bool;
+    // }
+    // public function unban()
+    // {
+    //     return $this->is_banned = false;
+    // }
 }

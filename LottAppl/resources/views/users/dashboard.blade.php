@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">User Management</div>
+                <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -13,11 +13,16 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                      </form>
-                
+
+                    <p>You are logged in!</p>
+                    <p> Hello {{Auth::user()->name}}</p>
+                    @if (Auth::user()->is_admin)
+                        <p>you're admin!</p>
+                        <div>
+                            <a href="/users" class="btn btn-primary">Manage Users</a>
+                            <a href="/lottery" class ="btn btn-primary">Manage Lottery</a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
