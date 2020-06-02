@@ -22,6 +22,17 @@
                             <a href="/users" class="btn btn-primary">View Users</a>
                     @endif
                     <a href="/lottery" class ="btn btn-primary">View Lottery</a>
+                    <td>
+                        {{Form::open(['route'=>['lottery.crawl'],'method'=>'POST'])}}
+                        {{Form::submit('crawl',['class'=>'btn btn-danger'])}}
+                        {{Form::close()}}
+                    </td>
+                    {{-- <td>
+                        {{Form::open(['route'=>['lottery.latest'],'method'=>'get'])}}
+                        {{Form::submit('latest',['class'=>'btn btn-danger'])}}
+                        {{Form::close()}}
+                    </td> --}}
+
                     </div>
                 </div>
             </div>

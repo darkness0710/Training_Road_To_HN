@@ -6,12 +6,17 @@ use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use App\Lottery;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+// include_once '../vendor/autoload.php';
+
+use simplehtmldom\HtmlWeb;
 
 class LotteryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index','show']]);
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
     public function index()
     {
@@ -40,14 +45,14 @@ class LotteryController extends Controller
     public function show($id)
     {
         $lott = Lottery::find($id);
-        return view('lottery.show', ['lott'=> $lott]);
+        return view('lottery.show', ['lott' => $lott]);
     }
     public function edit($id)
     {
         $lott = Lottery::find($id);
         return view('lottery.edit')->with('lott', $lott);
     }
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'date' => 'required',
@@ -68,8 +73,8 @@ class LotteryController extends Controller
     }
     public function search(Request $request)
     {
-        $search1 = $request->get('search1');
-        $search2 = $request->get('search2');
+        $search1 = $request->get('search1'); //date
+        $search2 = $request->get('search2'); //email
         if (empty($search1)) {
             $lottos = DB::table('lotteries')->where('result', 'LIKE', '%' . $search2 . '%')->get();
         } else if (empty($search2)) {
@@ -77,5 +82,60 @@ class LotteryController extends Controller
         } else
             $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->where('result', 'LIKE', '%' . $search2 . '%')->get();
         return view('lottery.index', ['lottos' => $lottos]);
+    }
+    // public function getTime()
+    // {
+    //     $date = Carbon::now('Asia/Ho_Chi_Minh')->subDay()->format('d-m-y');
+    //     return view('lottery.test', ['date' => $date]);
+    // }
+    public function crawl()
+    {
+        $date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(3)->format('d-m-yy');
+        $url = 'https://xoso.com.vn/xsmb-' . $date . '.html';
+
+        $html = (new HtmlWeb())->load($url);
+        $table = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+        // foreach ($table->find('tr') as $tr) {
+        //     $item['col'] = $tr->find('td.giai-txt', 0)->plaintext;
+        //     $item['span'] = $tr->find('td.number', 0)->plaintext;
+        //     $data[] = $item;
+        // }
+        dd($table);
+        // return view('lottery.crawl', ['url'=>$url]);
+    }
+    public function crawl2()
+    {
+        $from = Carbon::now()->subDays(3)->format('d-m-yy');
+        $to = Carbon::now()->format('d-m-yy');
+        $period = CarbonPeriod::create($from, $to);
+        foreach ($period as $date) {
+            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy'). '.html';
+            $html = (new HtmlWeb())->load($url);
+            $item['date'] = $date->format('d-m-yy');
+            $item['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+            $html->clear();
+            unset($html);
+             $data [] = $item;
+            
+        }
+        dd($data);
+        // return view('lottery.crawl', ['url'=>$url]);
+    }
+
+    public function test(Request $request)
+    {
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $period = CarbonPeriod::create($from, $to);
+        foreach ($period as $date) {
+            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy'). '.html';
+            $html = (new HtmlWeb())->load($url);
+            $item['date'] = $date->format('d-m-yy');
+            $item['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+            $html->clear();
+            unset($html);
+             $data [] = $item;            
+        }
+        return view('lottery.latest', ['data'=>$data]);
     }
 }
