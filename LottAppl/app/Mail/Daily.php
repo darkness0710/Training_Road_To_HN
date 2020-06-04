@@ -17,9 +17,9 @@ class Daily extends Mailable
      * @return void
      */
     protected $lott;
-    public function __construct()
+    public function __construct($lott)
     {
-        //
+        $this->lott = $lott;
     }
 
     /**
@@ -30,7 +30,6 @@ class Daily extends Mailable
     public function build()
     {
         return $this->view('emails.daily')
-                    ->subject($lott->date.' Result')
-                    ->with('lott',$lott);
+                    ->with('lott',$this->lott);
     }
 }

@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Lottery;
 use App\Mail\Newsletter;
-use Illuminate\Http\Request;
+use App\Mail\Daily;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class EmailController extends Controller
 {
-    public function sendEmail()
+    public function sendNewsletter()
     {
-        $user= auth()->user();
-        Mail::to($user)->send(new Newsletter($user));
-        if (Mail::failures()) {
-            return response()->Fail('Sorry! Please try again latter');
-       }else{
-            return response()->success('Great! Successfully send in your mail');
-          }
+        Mail::to('test@test.com')->send(new Newsletter);
+    }
+    public function sendDaily()
+    {
+        $date = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-yy');
+        $lott = DB::table('lotteries')->where('date', 'LIKE', $date);
+        $users = DB::table('users')->where('isSubscribed', 'LIKE', '1')->get();
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new Daily($lott));
+        }
     }
 }

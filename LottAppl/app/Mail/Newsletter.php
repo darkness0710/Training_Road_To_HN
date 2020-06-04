@@ -18,9 +18,9 @@ class Newsletter extends Mailable
      */
     public $user;
     
-    public function __construct($user)
+    public function __construct()
     {
-        $this->user = $user;
+        // $this->user = $user;
     }
 
     /**
@@ -31,6 +31,7 @@ class Newsletter extends Mailable
     public function build()
     {
         return $this->view('emails.newsletter')
-                    ->with('user',$user);
+                    // ->with('user',$this->user)
+                    ;
     }
 }

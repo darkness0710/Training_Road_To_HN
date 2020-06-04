@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
- <title>{{$lott->date}} Result</title>
+    <title>{{config('app.name')}}</title>
 </head>
+
 <body>
- 
- <h1>Here's the result of today</h1>
- <p>Thank you, {{ $user->result }}</p>
- 
+
+    <h1>{{$lott->date}} Result</h1>
+    <p>{{$lott->result}}</p>
+
 </body>
-</html> 
+
+</html>

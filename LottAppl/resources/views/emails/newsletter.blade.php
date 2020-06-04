@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
- <title>Newsletter</title>
+    <title>Newsletter</title>
 </head>
+
 <body>
- 
- <h1>Here's your email</h1>
- <p>Thank you, {{ $user->name }}</p>
- 
+
+    <h1>Thanks for your registeration</h1>
+    <p>Welcome</p>
+    <p> Would you like to receive daily email?</p>
+    <button>subscribe</button>
 </body>
-</html> 
+
+</html>
