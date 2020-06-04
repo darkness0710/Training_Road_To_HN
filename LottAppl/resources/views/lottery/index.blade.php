@@ -6,10 +6,10 @@
         <h1>Daily Lotto</h1>
     </div>
     @auth
-    <div>
-        <a class="btn btn-primary float-right" href="/lottery/add">Add</a>
-        <a class="btn btn-primary float-right mr-1" href="/crawl">Crawl 1</a>
-        <a class="btn btn-primary float-right mr-1" href="/crawltodb">Crawl to DB</a>
+    <div class="float-right">
+        <a class="btn btn-primary" href="/lottery/add">Add</a>
+        <a class="btn btn-primary" href="/crawl">Crawl 1</a>
+        <a class="btn btn-primary" href="/crawltodb">Crawl to DB</a>
     </div>   
     @endauth
     <div class="float-left">
@@ -48,7 +48,7 @@
 
             @endforeach
         </table>
-
+        {{$lottos->links()}}
     </div>
 </div>
 @endsection

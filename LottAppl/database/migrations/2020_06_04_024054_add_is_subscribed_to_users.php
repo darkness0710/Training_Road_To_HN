@@ -14,7 +14,7 @@ class AddIsSubscribedToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('subscribe_status')->default(0);
+            $table->boolean('isSubscribed')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddIsSubscribedToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('subscribe_status');
+            $table->dropColumn('isSubscribed');
         });
     }
 }

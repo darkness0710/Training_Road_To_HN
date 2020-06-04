@@ -3,30 +3,27 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\User;
 use App\Lottery;
-use App\Mail\Newsletter;
-use App\Mail\Daily;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use simplehtmldom\HtmlWeb;
 
-
-class CronEmail extends Command
+class cronCrawlLottery extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'email:dailysend';
+    protected $signature = 'lottery:crawl';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Daily Lottos result Update by email';
+    protected $description = 'Crawl Lottery Result daily at 18:31';
 
     /**
      * Create a new command instance.
@@ -46,11 +43,10 @@ class CronEmail extends Command
     public function handle()
     {
         $date = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-yy');
-        $lott = DB::table('lotteries')->where('date', 'LIKE', $date);
-        $users = DB::table('users')->where('isSubscribed', 'LIKE', '1')->get();
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new Daily($lott));
-        }
+        $result['date'] = $date;
+        $url = 'https://xoso.com.vn/xsmb-' . $date . '.html';
 
+        $html = (new HtmlWeb())->load($url);
+        $result['prize'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
     }
 }

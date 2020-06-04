@@ -39,9 +39,10 @@ Route::delete('lottery/{id}', 'LotteryController@delete')->name('lottery.delete'
 //crawl
 // Route::get('/test','LotteryController@test')->name('lottery.test');
 Route::get('crawl','LotteryController@crawl')->name('lottery.crawl');
-Route::get('crawlresult','LotteryController@crawlAction')->name('lottery.crawlaction');
+Route::get('crawl-single-result','LotteryController@crawlAction')->name('lottery.crawlaction');
 Route::get('crawltodb','LotteryController@crawltoDb')->name('lottery.crawltodb');
 Route::get('crawlresult','LotteryController@crawlToDbAction')->name('lottery.crawltodbaction');
 
 //email
-Route::get('emails/newsletter','EmailController@sendNewsletter')->name('emails.newsletter');
+Route::get('email/newsletter','EmailController@sendNewsletter')->name('email.newsletter');
+Route::get('email/daily','EmailController@sendDaily')->name('email.daily');
