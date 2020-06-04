@@ -38,7 +38,6 @@ class LotteryController extends Controller
         $lott = new Lottery;
         $lott->date = $request->input('date');
         $lott->result = $request->input('result');
-        // $lott->user_id =auth()->user()->id;
         $lott->save();
         return redirect()->route('lottery.index')->with('success', $lott->date . ' Result added');
     }
@@ -61,7 +60,6 @@ class LotteryController extends Controller
         $lott = Lottery::find($id);
         $lott->date = $request->input('date');
         $lott->result = $request->input('result');
-        // $lott->user_id =auth()->user()->id;
         $lott->save();
         return redirect()->route('lottery.index')->with('success', $lott->date . ' modified');
     }

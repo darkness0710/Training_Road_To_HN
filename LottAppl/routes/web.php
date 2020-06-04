@@ -43,4 +43,5 @@ Route::get('crawlresult','LotteryController@crawlaction')->name('lottery.crawlac
 Route::get('crawltodb','LotteryController@crawltodb')->name('lottery.crawltodb');
 Route::get('crawlresult','LotteryController@crawltodbaction')->name('lottery.crawltodbaction');
 
-
+//email
+Route::get('emails/daily-update','Newsleter@sendEmail')->name('emails.daily');
