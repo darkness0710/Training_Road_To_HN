@@ -90,18 +90,29 @@ class LotteryController extends Controller
     // }
     public function crawl()
     {
-        $date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(3)->format('d-m-yy');
+        return view('lottery.crawl');
+    }
+    public function crawlAction(Request $request)
+    {
+        // $date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(3)->format('d-m-yy');
+
+        $input = $request->input('date');
+        $result['date'] = $input;
+        $date = Carbon::create($input)->format('d-m-yy');
         $url = 'https://xoso.com.vn/xsmb-' . $date . '.html';
 
         $html = (new HtmlWeb())->load($url);
-        $table = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+        $result['prize'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
         // foreach ($table->find('tr') as $tr) {
         //     $item['col'] = $tr->find('td.giai-txt', 0)->plaintext;
         //     $item['span'] = $tr->find('td.number', 0)->plaintext;
         //     $data[] = $item;
         // }
-        dd($table);
-        // return view('lottery.crawl', ['url'=>$url]);
+        // dd($table);
+        $html->clear();
+        unset($html);
+
+        return view('lottery.crawl', ['result' => $result]);
     }
     public function crawl2()
     {
@@ -109,33 +120,42 @@ class LotteryController extends Controller
         $to = Carbon::now()->format('d-m-yy');
         $period = CarbonPeriod::create($from, $to);
         foreach ($period as $date) {
-            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy'). '.html';
+            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy') . '.html';
             $html = (new HtmlWeb())->load($url);
             $item['date'] = $date->format('d-m-yy');
             $item['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
             $html->clear();
             unset($html);
-             $data [] = $item;
-            
+            $data[] = $item;
         }
         dd($data);
         // return view('lottery.crawl', ['url'=>$url]);
     }
+    public function crawlToDb()
+    {
+        return view('lottery.crawltoDB');
+    }
 
-    public function test(Request $request)
+    public function crawlToDBAction(Request $request)
     {
         $from = $request->input('from');
         $to = $request->input('to');
         $period = CarbonPeriod::create($from, $to);
         foreach ($period as $date) {
-            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy'). '.html';
+            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy') . '.html';
             $html = (new HtmlWeb())->load($url);
             $item['date'] = $date->format('d-m-yy');
             $item['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
             $html->clear();
             unset($html);
-             $data [] = $item;            
+            $data[] = $item;
         }
-        return view('lottery.latest', ['data'=>$data]);
+        foreach ($data as $item) {
+            $lott = Lottery::updateOrCreate(
+                ['date' => $item['date']],
+                ['result' => $item['result']]
+            );
+        }
+        return redirect()->route('lottery.index')->with('success', 'Crawled');;
     }
 }

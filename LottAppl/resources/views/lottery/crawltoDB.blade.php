@@ -3,7 +3,7 @@
 
 @section('content')
 <h1>Latest </h1>
-{!! Form::open(['route'=>'lottery.test','method' =>'get']) !!}
+{!! Form::open(['route'=>'lottery.crawltodbaction','method' =>'get']) !!}
 <div class="form-group">
     {{-- from --}}
     {{Form::label('from','From')}}

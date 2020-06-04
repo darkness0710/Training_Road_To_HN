@@ -8,6 +8,8 @@
     @auth
     <div>
         <a class="btn btn-primary float-right" href="/lottery/add">Add</a>
+        <a class="btn btn-primary float-right mr-1" href="/crawl">Crawl</a>
+
     </div>   
     @endauth
     <div class="float-left">
