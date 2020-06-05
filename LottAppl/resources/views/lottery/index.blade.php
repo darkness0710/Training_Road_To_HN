@@ -10,6 +10,7 @@
         <a class="btn btn-primary" href="/lottery/add">Add</a>
         <a class="btn btn-primary" href="/crawl">Crawl 1</a>
         <a class="btn btn-primary" href="/crawltodb">Crawl to DB</a>
+        <a class="btn btn-primary" href={{route('lottery.upload.view')}}>Upload</a>
     </div>   
     @endauth
     <div class="float-left">
@@ -48,7 +49,7 @@
 
             @endforeach
         </table>
-        {{$lottos->links()}}
+        {{-- {{$lottos->links()}} --}}
     </div>
 </div>
 @endsection

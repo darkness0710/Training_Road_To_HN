@@ -21,13 +21,18 @@ Auth::routes();
 
 Route::get('/about', 'PagesController@about');
 Route::get('/','PagesController@welcome');
-//users
+//users resource
 Route::get('/users/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('users/','UserController@index')->name('users.index');
 Route::get('users/search','UserController@search')->name('users.search');
 Route::post('users/ban/{id}','UserController@ban')->name('users.ban');
 Route::post('users/uprole/{id}','UserController@uprole')->name('users.uprole');
-//lottos
+
+//Lottery upload
+Route::post('lottery/uploadAction','LotteryController@uploadFile')->name('lottery.uploadAction');
+Route::get('lottery/upload','LotteryController@uploadView')->name('lottery.upload.view');
+
+//lotteries resource
 Route::get('lottery/','LotteryController@index')->name('lottery.index');
 Route::get('lottery/search','LotteryController@search')->name('lottery.search');
 Route::get('lottery/add','LotteryController@add')->name('lottery.add');
@@ -46,3 +51,4 @@ Route::get('crawlresult','LotteryController@crawlToDbAction')->name('lottery.cra
 //email
 Route::get('email/newsletter','EmailController@sendNewsletter')->name('email.newsletter');
 Route::get('email/daily','EmailController@sendDaily')->name('email.daily');
+

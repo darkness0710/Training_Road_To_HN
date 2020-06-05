@@ -19,12 +19,13 @@ class UserController extends Controller
         $users = DB::table('users')->orderBy('name')->get();
         return view('users.index')->with('users', $users);
     }
+
     public function search(Request $request)
     {
         $search1 = $request->get('search1');
         $search2 = $request->get('search2');
         if (empty($search1)) {
-            $users = DB::table('users')->where('email','LIKE','%'.$search2.'%')->get();
+            $users = DB::table('users')->where('email', 'LIKE', '%' . $search2 . '%')->get();
         } else if (empty($search2)) {
             $users = DB::table('users')->where('name', 'LIKE', '%' . $search1 . '%')->get();
         } else
@@ -36,8 +37,9 @@ class UserController extends Controller
         // $users = DB::table('users')->where('name','LIKE','%'.$search.'%')->get();
         // return view('users.index',['users'=>$users]);
     }
+
     public function ban($id)
-    {   
+    {
         $user = User::find($id);
         if (!$user->is_banned) {
             $user->is_banned = '1';
@@ -45,11 +47,10 @@ class UserController extends Controller
         } else {
             $user->is_banned = '0';
             $user->save();
-
         }
         return redirect('/users');
-
     }
+
     public function uprole($id)
     {
         $user = User::find($id);
@@ -59,8 +60,8 @@ class UserController extends Controller
         } else {
             $user->is_admin = '0';
             $user->save();
-
         }
         return redirect('/users');
     }
+
 }

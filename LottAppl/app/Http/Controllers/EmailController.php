@@ -19,8 +19,8 @@ class EmailController extends Controller
     public function sendDaily()
     {
         $date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(1)->format('d-m-yy');
-        $lott = DB::table('lotteries')->where('date', 'LIKE', $date)->get();
-        $users = DB::table('users')->where('isSubscribed', 'LIKE', '1')->get();
+        $lott = DB::table('lotteries')->where('date', 'LIKE', $date)->first();
+        $users = DB::table('users')->where('is_subscribed', 'LIKE', '1')->get();
         foreach ($users as $user) {
             Mail::to($user->email)->send(new Daily($lott));
         }

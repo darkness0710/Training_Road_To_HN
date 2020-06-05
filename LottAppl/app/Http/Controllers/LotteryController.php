@@ -8,8 +8,9 @@ use App\Lottery;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Query\Builder;
 // include_once '../vendor/autoload.php';
-
 use simplehtmldom\HtmlWeb;
 
 class LotteryController extends Controller
@@ -21,9 +22,14 @@ class LotteryController extends Controller
     public function index()
     {
         // $lotts = DB::table('lotts')->orderbyRaw('created_at DESC')->get();//select all from lotts with sql structures
-
-        $lottos = Lottery::orderBy('date', 'desc')->paginate(10);
-        return view('lottery.index')->with('lottos', $lottos);
+        $lottos = DB::table('lotteries')
+                ->selectRaw('* ') 
+                ->orderByRaw('date ASC') 
+                /*->withCasts(['date' => 'datetime'])*/
+                ->get();
+        dd($lottos);
+        // $lottos = Lottery::select('date', 'desc')->paginate(10);
+        // return view('lottery.index')->with('lottos', $lottos);
     }
     public function add()
     {
@@ -79,7 +85,7 @@ class LotteryController extends Controller
             $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->orderBy('date', 'desc')->get();
         } else
             $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->where('result', 'LIKE', '%' . $search2 . '%')->orderBy('date', 'desc')->get();
-            return view('lottery.index', ['lottos' => $lottos]);
+        return view('lottery.index', ['lottos' => $lottos]);
     }
     // public function getTime()
     // {
@@ -155,5 +161,62 @@ class LotteryController extends Controller
             );
         }
         return redirect()->route('lottery.index')->with('success', 'Crawled');;
+    }
+    public function uploadView()
+    {
+        return view('lottery.upload');
+    }
+    public function uploadFile(Request $request)
+    {
+        $file = $request->file('file');
+
+        //file details
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $fileSize = $file->getSize();
+        $createdTime = Carbon::now('Asia/Ho_Chi_Minh');
+        //csv validation
+        $extValidation = ['csv'];
+
+        //max size for upload
+        $maxSize = 2097152;
+
+        if (in_array(strtolower($extension), $extValidation)) {
+            if ($fileSize <= $maxSize) {
+                $location = 'uploads';
+                $file->move($location, $filename);              // move file to its path to read
+                $filepath = public_path($location . "/" . $filename);
+                $file = fopen($filepath, "r");                 // Reading file
+                $importData_arr = array();
+                $i = 0; //starting row to read 
+                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                    $num = count($filedata); //count row number
+                    if ($i == 0) {
+                        $i++; //skip row 0 because it's column name
+                        continue;
+                    }
+                    for ($c = 0; $c < $num; $c++) {
+                        $importData_arr[$i][] = $filedata[$c]; //import row into array of import data
+                    }
+                    $i++;
+                }
+                fclose($file);
+                foreach ($importData_arr as $importData) {
+                    $insertData = array(
+                        'date' => $importData[0],
+                        'result' => $importData[1],
+                        'created_at'=> $createdTime,
+                        'updated_at'=>$createdTime,
+                    );
+                    Lottery::insertData($insertData);
+                }
+                Session::flash('message', 'Import Successful.');
+            } else {
+                Session::flash('message', 'File too large. File must be less than 2MB.');
+            }
+        } else {
+            Session::flash('message', 'Invalid File Extension.');
+        }
+        return redirect()->route('lottery.index');
     }
 }

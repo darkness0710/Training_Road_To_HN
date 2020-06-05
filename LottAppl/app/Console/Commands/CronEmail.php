@@ -45,12 +45,11 @@ class CronEmail extends Command
      */
     public function handle()
     {
-        $date = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-yy');
-        $lott = DB::table('lotteries')->where('date', 'LIKE', $date);
-        $users = DB::table('users')->where('isSubscribed', 'LIKE', '1')->get();
+        $date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(1)->format('d-m-yy');
+        $lott = DB::table('lotteries')->where('date', 'LIKE', $date)->first();
+        $users = DB::table('users')->where('is_subscribed', 'LIKE', '1')->get();
         foreach ($users as $user) {
             Mail::to($user->email)->send(new Daily($lott));
         }
-
     }
 }
