@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Auth::routes();
+
+//Socialite-github
+Route::get('login/github', 'Auth\LoginController@github')->name('login.github');
+Route::get('login/github/redirect', 'Auth\LoginController@githubRedirectHandle');
+//Socialite-google
+// Route::get('login/google', 'Auth\LoginController@google')->name('login.google');
+// Route::get('login/google/redirect', 'Auth\LoginController@googleRedirectHandle');
+
 
 Route::get('/about', 'PagesController@about');
 Route::get('/','PagesController@welcome');

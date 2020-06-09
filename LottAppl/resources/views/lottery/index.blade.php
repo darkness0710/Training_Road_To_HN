@@ -30,7 +30,7 @@
             </tr>
             @foreach ($lottos as $lott)
             <tr>
-            <td><a href="lottery/{{$lott->id}}">{{$lott->date}}</a></td>
+            <td><a href="/{{$lott->id}}">{{$lott->date}}</a></td>
                 <td>{{$lott->result}}</td>
                 @if (Auth::user()->is_admin)
                 <td>
@@ -49,7 +49,7 @@
 
             @endforeach
         </table>
-        {{-- {{$lottos->links()}} --}}
+        {{$lottos->links()}}
     </div>
 </div>
 @endsection

@@ -21,15 +21,15 @@ class LotteryController extends Controller
     }
     public function index()
     {
-        // $lotts = DB::table('lotts')->orderbyRaw('created_at DESC')->get();//select all from lotts with sql structures
         $lottos = DB::table('lotteries')
-                ->selectRaw('* ') 
-                ->orderByRaw('date ASC') 
-                /*->withCasts(['date' => 'datetime'])*/
-                ->get();
-        dd($lottos);
+            ->orderBy('date', 'desc')
+            // ->orderByRaw('CAST(date as DATE) DESC') 
+            ->simplePaginate(7)
+            //->get()
+        ;
+        // dd($lottos);
         // $lottos = Lottery::select('date', 'desc')->paginate(10);
-        // return view('lottery.index')->with('lottos', $lottos);
+        return view('lottery.index')->with('lottos', $lottos);
     }
     public function add()
     {
@@ -41,10 +41,10 @@ class LotteryController extends Controller
             'date' => 'required',
             'result' => 'required'
         ]);
-        $lott = new Lottery;
-        $lott->date = $request->input('date');
-        $lott->result = $request->input('result');
-        $lott->save();
+        $lott = Lottery::updateOrCreate(
+            ['date' => $request['date']],
+            ['result' => $request['result']]
+        );
         return redirect()->route('lottery.index')->with('success', $lott->date . ' Result added');
     }
     public function show($id)
@@ -80,11 +80,11 @@ class LotteryController extends Controller
         $search1 = $request->get('search1'); //date
         $search2 = $request->get('search2'); //email
         if (empty($search1)) {
-            $lottos = DB::table('lotteries')->where('result', 'LIKE', '%' . $search2 . '%')->orderBy('date', 'desc')->get();
+            $lottos = DB::table('lotteries')->where('result', 'LIKE', '%' . $search2)->orderBy('date', 'desc')->simplePaginate(7);
         } else if (empty($search2)) {
-            $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->orderBy('date', 'desc')->get();
+            $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->orderBy('date', 'desc')->simplePaginate(7);
         } else
-            $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->where('result', 'LIKE', '%' . $search2 . '%')->orderBy('date', 'desc')->get();
+            $lottos = DB::table('lotteries')->where('date', 'LIKE', '%' . $search1 . '%')->where('result', 'LIKE', '%' . $search2)->orderBy('date', 'desc')->simplePaginate(7);
         return view('lottery.index', ['lottos' => $lottos]);
     }
     // public function getTime()
@@ -144,7 +144,11 @@ class LotteryController extends Controller
     {
         $from = $request->input('from');
         $to = $request->input('to');
-        $period = CarbonPeriod::create($from, $to);
+        if ($from < $to) {
+            $period = CarbonPeriod::create($from, $to);
+        } else {
+            $period = CarbonPeriod::create($to, $from);
+        }
         foreach ($period as $date) {
             $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-yy') . '.html';
             $html = (new HtmlWeb())->load($url);
@@ -205,8 +209,8 @@ class LotteryController extends Controller
                     $insertData = array(
                         'date' => $importData[0],
                         'result' => $importData[1],
-                        'created_at'=> $createdTime,
-                        'updated_at'=>$createdTime,
+                        'created_at' => $createdTime,
+                        'updated_at' => $createdTime,
                     );
                     Lottery::insertData($insertData);
                 }
