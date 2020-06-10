@@ -30,7 +30,7 @@
             </tr>
             @foreach ($lottos as $lott)
             <tr>
-            <td><a href="/{{$lott->id}}">{{$lott->date}}</a></td>
+            <td><a href="/{{$lott->id}}">{{formatDateView($lott->date)}}</a></td>
                 <td>{{$lott->result}}</td>
                 @if (Auth::user()->is_admin)
                 <td>
@@ -39,7 +39,7 @@
                     {{Form::close()}}
                 </td>
                 <td>
-                    {{Form::open(['route'=>['lottery.delete',$lott->id],'method'=>'POST','onsubmit'=>'return confirm("Ban this user?")'])}}
+                    {{Form::open(['route'=>['lottery.delete',$lott->id],'method'=>'POST','onsubmit'=>'return confirm("Delete This Day?")'])}}
                     {{Form::hidden('_method','DELETE')}}
                     {{Form::submit('Delete',['class'=>'btn btn-danger'])}}
                     {{Form::close()}}
