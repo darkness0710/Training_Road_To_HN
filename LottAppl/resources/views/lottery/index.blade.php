@@ -11,7 +11,7 @@
         <a class="btn btn-primary" href="/crawl">Crawl 1</a>
         <a class="btn btn-primary" href="/crawltodb">Crawl to DB</a>
         <a class="btn btn-primary" href={{route('lottery.upload.view')}}>Upload</a>
-    </div>   
+    </div>
     @endauth
     <div class="float-left">
         {{ Form::open(['route'=>'lottery.search','method'=>'GET']) }}
@@ -30,7 +30,7 @@
             </tr>
             @foreach ($lottos as $lott)
             <tr>
-            <td><a href="/{{$lott->id}}">{{formatDateView($lott->date)}}</a></td>
+                <td>{!! link_to_route('lottery.show',formatDateView($lott->date),['id' => $lott->id])!!}</td>
                 <td>{{$lott->result}}</td>
                 @if (Auth::user()->is_admin)
                 <td>
@@ -45,7 +45,7 @@
                     {{Form::close()}}
                 </td>
             </tr>
-                @endif
+            @endif
 
             @endforeach
         </table>
