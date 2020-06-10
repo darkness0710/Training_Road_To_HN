@@ -32,7 +32,7 @@
             <tr>
                 <td>{!! link_to_route('lottery.show',formatDateView($lott->date),['id' => $lott->id])!!}</td>
                 <td>{{$lott->result}}</td>
-                @if (Auth::user()->is_admin)
+                {{-- @if (Auth::user()->is_admin) --}}
                 <td>
                     {{Form::open(['route'=>['lottery.edit',$lott->id],'method'=>'GET'])}}
                     {{Form::submit('Edit',['class'=>'btn btn-danger'])}}
@@ -45,7 +45,7 @@
                     {{Form::close()}}
                 </td>
             </tr>
-            @endif
+                {{-- @endif --}}
 
             @endforeach
         </table>
