@@ -51,7 +51,7 @@ Route::put('lottery/{id}','LotteryController@update')->name('lottery.update');
 Route::delete('lottery/{id}', 'LotteryController@delete')->name('lottery.delete');
 //crawl
 // Route::get('/test','LotteryController@test')->name('lottery.test');
-Route::get('crawl','LotteryController@crawl')->name('lottery.crawl');
+Route::get('crawl','LotteryController@crawlEdit')->name('lottery.crawl');
 Route::get('crawl-single-result','LotteryController@crawlAction')->name('lottery.crawlaction');
 Route::get('crawltodb','LotteryController@crawltoDb')->name('lottery.crawltodb');
 Route::get('crawlresult','LotteryController@crawlToDbAction')->name('lottery.crawltodbaction');
