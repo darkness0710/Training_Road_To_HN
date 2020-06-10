@@ -4,11 +4,10 @@ namespace App\Repositories\Eloquents;
 
 use App\Lottery;
 use App\Repositories\Interfaces\LotteryRepositoryInterface;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use simplehtmldom\HtmlWeb;
-use Illuminate\Support\Facades\Session;
+
 class LotteryRepository implements LotteryRepositoryInterface
 {
 
@@ -78,49 +77,34 @@ class LotteryRepository implements LotteryRepositoryInterface
     {
         //file details
         $filename = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $fileSize = $file->getSize();
         $createdTime = Carbon::now('Asia/Ho_Chi_Minh');
-        $extValidation = ['csv'];
-
-        //max size for upload
-        $maxSize = 2097152;
-
-        if (in_array(strtolower($extension), $extValidation)) {
-            if ($fileSize <= $maxSize) {
-                $location = 'uploads';
-                $file->move($location, $filename);              // move file to its path to read
-                $filepath = public_path($location . "/" . $filename);
-                $file = fopen($filepath, "r");                 // Reading file
-                $importData_arr = array();
-                $i = 0; //starting row to read 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
-                    $num = count($filedata); //count row number
-                    if ($i == 0) {
-                        $i++; //skip row 0 because it's column name
-                        continue;
-                    }
-                    for ($c = 0; $c < $num; $c++) {
-                        $importData_arr[$i][] = $filedata[$c]; //import row into array of import data
-                    }
-                    $i++;
-                }
-                fclose($file);
-                foreach ($importData_arr as $importData) {
-                    $this->model->updateOrCreate(
-                        ['date' => formatDateDB($importData[0])],
-                        ['result' => $importData[1],
-                        'created_at' => $createdTime,
-                        'updated_at' => $createdTime]
-                    );
-                }
-                Session::flash('message', 'Import Successful.');
-            } else {
-                Session::flash('message', 'File too large. File must be less than 2MB.');
+        $location = 'uploads';
+        $file->move($location, $filename);              // move file to its path to read
+        $filepath = public_path($location . "/" . $filename);
+        $file = fopen($filepath, "r");                 // Reading file
+        $importData_arr = array();
+        $i = 0; //starting row to read 
+        while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+            $num = count($filedata); //count row number
+            if ($i == 0) {
+                $i++; //skip row 0 because it's column name
+                continue;
             }
-        } else {
-            Session::flash('message', 'Invalid File Extension.');
+            for ($c = 0; $c < $num; $c++) {
+                $importData_arr[$i][] = $filedata[$c]; //import row into array of import data
+            }
+            $i++;
         }
-
+        fclose($file);
+        foreach ($importData_arr as $importData) {
+            $this->model->updateOrCreate(
+                ['date' => formatDateDB($importData[0])],
+                [
+                    'result' => $importData[1],
+                    'created_at' => $createdTime,
+                    'updated_at' => $createdTime
+                ]
+            );
+        }
     }
 }

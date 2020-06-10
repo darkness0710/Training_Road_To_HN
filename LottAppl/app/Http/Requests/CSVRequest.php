@@ -24,7 +24,15 @@ class CSVRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|max:2097152'
+            'file' => 'required|max:2097152|mimes:text/csv'
+        ];
+    }
+    public function message()
+    {
+        return[
+            'file.required' => 'A file is required',
+            'file.max' =>'Size must be smaller than 2mb',
+            'file.mimes' =>'must be csv'
         ];
     }
 }

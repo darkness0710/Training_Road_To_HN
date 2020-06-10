@@ -13,7 +13,7 @@ class CrawlRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class CrawlRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'from' =>'required',
+            'to' =>'required',
         ];
     }
 }

@@ -1,21 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CrawlRequest;
+use App\Http\Requests\CSVRequest;
 use App\Http\Requests\LotteryRequest;
-use App\Http\Requests\storeLottery;
 use App\Repositories\Interfaces\LotteryRepositoryInterface;
 use GuzzleHttp\Middleware;
-use Illuminate\Http\Request;
-use App\Lottery;
-// use App\Repositories\Lottery;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Database\Query\Builder;
-// include_once '../vendor/autoload.php';
-use simplehtmldom\HtmlWeb;
 
 class LotteryController extends Controller
 {
@@ -39,7 +29,7 @@ class LotteryController extends Controller
 
     public function store(LotteryRequest $request)
     {
-        $validated = $request->validated();
+        $request->validated();
         $attribute = $request->all();
         $this->lotteryRepository->store($attribute);
         return redirect()->route('lottery.index')->with('success', $attribute['date'] . ' Result added');
@@ -59,7 +49,7 @@ class LotteryController extends Controller
 
     public function update($id, LotteryRequest $request)
     {
-        $request->validate();
+        $request->validated();
         $attribute = $request->all();
         $this->lotteryRepository->update($id, $attribute);
         return redirect()->route('lottery.index')->with('success', $attribute['date'] . ' modified');
@@ -76,8 +66,9 @@ class LotteryController extends Controller
         return view('lottery.crawltoDB');
     }
 
-    public function crawlToDbAction(Request $request)
+    public function crawlToDbAction(CrawlRequest $request)
     {
+        $request->validated();
         $attribute=$request->all();
         $this->lotteryRepository->crawl($attribute);
         return redirect()->route('lottery.index')->with('success', 'Crawled');;
@@ -88,8 +79,9 @@ class LotteryController extends Controller
         return view('lottery.upload');
     }
 
-    public function uploadFile(Request $request)
+    public function uploadFile(CSVRequest $request)
     {
+        $request->validated();
         $file = $request->file('file');
         $this->lotteryRepository->fromCSV($file);
         return redirect()->route('lottery.index');
