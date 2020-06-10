@@ -6,7 +6,7 @@
 {!! Form::hidden('_method','PUT') !!}
 <div class="form-group">
     {{Form::label('date','Date')}}
-    {{Form::text('date',$lott->date,['class'=>'form-control','placeholder'=>'Result Date (ddMMMyy)'])}}
+    {{Form::text('date',formatDateView($lott->date),['class'=>'form-control','placeholder'=>'Result Date (ddMMMyy)'])}}
 </div>
 <div class="form-group">
     {{Form::label('result','Result')}}

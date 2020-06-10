@@ -10,7 +10,12 @@ interface LotteryRepositoryInterface
 
     public function store($attribute);
 
-    // public function update($id, array $attribute);
+    public function update($id, array $attribute);
 
-    // public function delete($id);
+    public function delete($id);
+
+    public function crawl($attribute);
+
+    public function fromCSV($file);
+
 }
