@@ -72,6 +72,16 @@
                                 </a>
                                 @endif
                             </div>
+                            <div class="col-md-8 offset-md-4">
+                                <a class="btn btn-secondary" href="{{ route('login.github') }}">
+                                    {{ __('Login with Github') }}
+                                </a>
+                            </div>
+                            {{-- <div class="col-md-8 offset-md-4">
+                                <a class="btn btn-secondary" href="{{ route('login.google') }}">
+                                    {{ __('Login with Google') }} --}}
+                                </a>
+                            </div>
                         </div>
                     </form>
                 </div>

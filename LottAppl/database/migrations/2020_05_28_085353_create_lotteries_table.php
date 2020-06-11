@@ -16,7 +16,7 @@ class CreateLotteriesTable extends Migration
         Schema::create('lotteries', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('date');
+            $table->date('date');
             $table->mediumText('result');
         });
     }
