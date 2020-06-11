@@ -15,8 +15,8 @@
     @endauth
     <div class="float-left">
         {{ Form::open(['route'=>'lottery.search','method'=>'GET']) }}
-        {{ Form::text('search1','',['placeholder'=>'search by date'])}}
-        {{ Form::text('search2','',['placeholder'=>'search by number'])}}
+        {{ Form::text('date','',['placeholder'=>'search by date'])}}
+        {{ Form::text('result','',['placeholder'=>'search by number'])}}
         {{ Form::submit('>>', ['class'=>'btn btn-primary'])}}
         {{ Form::close() }}
     </div>

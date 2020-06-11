@@ -1,24 +1,26 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CrawlRequest;
 use App\Http\Requests\CSVRequest;
 use App\Http\Requests\LotteryRequest;
-use App\Repositories\Interfaces\LotteryRepositoryInterface;
+use App\Http\Requests\SearchRequest;
+use App\Services\LotteryService;
 use GuzzleHttp\Middleware;
 
 class LotteryController extends Controller
 {
-    protected $lotteryRepository;
+    protected $lotteryService;
 
-    public function __construct(LotteryRepositoryInterface $lotteryRepository)
+    public function __construct(LotteryService $lotteryService)
     {
-        $this->lotteryRepository = $lotteryRepository;
+        $this->lotteryService = $lotteryService;
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
     public function index()
     {
-        $lottos = $this->lotteryRepository->getAll();
+        $lottos = $this->lotteryService->all();
         return view('lottery.index')->with('lottos', $lottos);
     }
 
@@ -27,38 +29,45 @@ class LotteryController extends Controller
         return view('lottery.add');
     }
 
-    public function store(LotteryRequest $request)
+    public function create(LotteryRequest $request)
     {
-        $request->validated();
-        $attribute = $request->all();
-        $this->lotteryRepository->store($attribute);
-        return redirect()->route('lottery.index')->with('success', $attribute['date'] . ' Result added');
+        $input = $request->validated();
+        // $input = $request->all();
+        $this->lotteryService->create($input);
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.create.success', ['date' => $input['date']]));
     }
 
     public function show($id)
     {
-        $lott = $this->lotteryRepository->findById($id);
+        $lott = $this->lotteryService->find($id);
         return view('lottery.show', ['lott' => $lott]);
     }
 
     public function edit($id)
     {
-        $lott = $this->lotteryRepository->findById($id);
+        $lott = $this->lotteryService->find($id);
         return view('lottery.edit')->with('lott', $lott);
     }
 
     public function update($id, LotteryRequest $request)
     {
-        $request->validated();
-        $attribute = $request->all();
-        $this->lotteryRepository->update($id, $attribute);
-        return redirect()->route('lottery.index')->with('success', $attribute['date'] . ' modified');
+        $input = $request->validated();
+        // $input = $request->all();
+        $this->lotteryService->update($id, $input);
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.update.success', ['date' => $input['date']]));
     }
 
     public function delete($id)
     {
-        $lott = $this->lotteryRepository->delete($id);;
-        return redirect()->route('lottery.index')->with('success', 'Deleted');
+        $lott = $this->lotteryService->destroy($id);;
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.delete.success'));
+    }
+
+    public function search(SearchRequest $request)
+    {
+        $input = $request->validated();
+        $lottos = $this->lotteryService->search($input);
+        return view('lottery.index', ['lottos' => $lottos]);
     }
 
     public function crawlToDb()
@@ -68,10 +77,10 @@ class LotteryController extends Controller
 
     public function crawlToDbAction(CrawlRequest $request)
     {
-        $request->validated();
-        $attribute=$request->all();
-        $this->lotteryRepository->crawl($attribute);
-        return redirect()->route('lottery.index')->with('success', 'Crawled');;
+        $input = $request->validated();
+        // $input=$request->all();
+        $this->lotteryService->crawl($input);
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.crawl.success'));;
     }
 
     public function uploadView()
@@ -83,9 +92,7 @@ class LotteryController extends Controller
     {
         $request->validated();
         $file = $request->file('file');
-        $this->lotteryRepository->fromCSV($file);
-        return redirect()->route('lottery.index');
+        $this->lotteryService->fileUpload($file);
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.upload.success'));
     }
-
-
 }
