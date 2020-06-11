@@ -57,7 +57,7 @@ class LotteryService implements LotteryServiceInterface
             $period = CarbonPeriod::create($to, $from);
         }
         foreach ($period as $date) {
-            $url = 'https://xoso.com.vn/xsmb-' . $date->format('d-m-Y') . '.html';
+            $url = config('custom.crawl.url') . $date->format('d-m-Y') . '.html';
             $html = (new HtmlWeb())->load($url);
             $input['date'] = formatDateDB($date);
             $input['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
@@ -65,9 +65,7 @@ class LotteryService implements LotteryServiceInterface
             unset($html);
             $input_arr[] = $input;
         }
-        foreach ($input_arr as $input) {
-            $this->lotteryRepository->create($input);
-        }
+            $this->lotteryRepository->massCreate($input_arr);
     }
 
     public function fileUpload($file)
@@ -78,7 +76,7 @@ class LotteryService implements LotteryServiceInterface
         $file->move($location, $filename);              // move file to its path to read
         $filepath = public_path($location . "/" . $filename);
         $file = fopen($filepath, "r");                 // Reading file
-        $input_arr = array();
+        $input_arr = [];
         $i = 0; //starting row to read 
         while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
             $num = count($filedata); //count row number
@@ -93,8 +91,6 @@ class LotteryService implements LotteryServiceInterface
         }
         fclose($file);
 
-        foreach ($input_arr as $input) {
-            $this->lotteryRepository->create($input);
-        }
+        $this->lotteryRepository->massCreate($input_arr);
     }
 }

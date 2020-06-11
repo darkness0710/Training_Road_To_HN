@@ -10,6 +10,8 @@ interface LotteryRepositoryInterface
 
     public function create($attribute);
 
+    public function massCreate($attributes);
+
     public function update($id, array $attribute);
 
     public function destroy($id);

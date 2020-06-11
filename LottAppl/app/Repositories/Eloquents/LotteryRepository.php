@@ -30,15 +30,26 @@ class LotteryRepository implements LotteryRepositoryInterface
 
     public function create($attribute)
     {
-        $lott = $this->model->updateOrCreate(
+        $lott = $this->model->create(
             ['date' =>  formatDateDB($attribute['date'])],
             ['result' => $attribute['result']]
         );
         return $lott;
     }
+    
+    public function massCreate($attributes)
+    {   
+        $now = Carbon::now();
+        $lott = $this->model->create(
+            ['date' =>  formatDateDB($attributes['date'])],          
+            [['result' => $attributes['result']],['created_at' => $now],['updated_at'=> $now]]
+        );
+        return $lott;
+    }
+
     public function update($id, array $attribute)
     {
-        $lott= $this->model->updateOrCreate(
+        $lott= $this->model->update(
             ['date' =>  formatDateDB($attribute['date'])],
             ['result' => $attribute['result']]
         );
@@ -47,20 +58,23 @@ class LotteryRepository implements LotteryRepositoryInterface
 
     public function destroy($id)
     {
-        $this->find($id)->delete();
+        $this->model->find($id)->delete();
         return true;
     }
 
     public function search($input)
     {
-        $date = formatDateDB($input->get('date')); //date
-        $result = $input->get('result');
-        if (empty($date)) {
-            $lottos = $this->model->table('lotteries')->where('result', 'LIKE', '%' . $result)->orderBy('date', 'desc')->simplePaginate(7);
-        } else if (empty($result)) {
-            $lottos = $this->model->table('lotteries')->where('date', 'LIKE', '%' . $date . '%')->orderBy('date', 'desc')->simplePaginate(7);
-        } else
-            $lottos = $this->model->table('lotteries')->where('date', 'LIKE', '%' . $date . '%')->where('result', 'LIKE', '%' . $result)->orderBy('date', 'desc')->simplePaginate(7);
+        $date = formatDateDB($input['date']);
+        $result = $input['result'];
+        $lottos = $this->model->where('date', 'LIKE', '%' . $date . '%')->orwhere('result', 'LIKE', '%' . $result)->orderBy('date', 'desc')->simplePaginate(7);
+
+
+        // if (empty($date)) {
+        //     $lottos = $this->model->where('result', 'LIKE', '%' . $result)->orderBy('date', 'desc')->simplePaginate(7);
+        // } else if (empty($result)) {
+        //     $lottos = $this->model->where('date', 'LIKE', '%' . $date . '%')->orderBy('date', 'desc')->simplePaginate(7);
+        // } else
+        //     $lottos = $this->model->where('date', 'LIKE', '%' . $date . '%')->where('result', 'LIKE', '%' . $result)->orderBy('date', 'desc')->simplePaginate(7);
         return $lottos;
     }
     // public function crawl($attribute)

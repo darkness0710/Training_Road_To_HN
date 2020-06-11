@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CrawlRequest;
@@ -33,7 +34,7 @@ class LotteryController extends Controller
         $input = $request->validated();
         // $input = $request->all();
         $this->lotteryService->create($input);
-        return redirect()->route('lottery.index')->with('success', $input['date'] . ' Result added');
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.create.success', ['date' => $input['date']]));
     }
 
     public function show($id)
@@ -53,18 +54,18 @@ class LotteryController extends Controller
         $input = $request->validated();
         // $input = $request->all();
         $this->lotteryService->update($id, $input);
-        return redirect()->route('lottery.index')->with('success', $input['date'] . ' modified');
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.update.success', ['date' => $input['date']]));
     }
 
     public function delete($id)
     {
         $lott = $this->lotteryService->destroy($id);;
-        return redirect()->route('lottery.index')->with('success', 'Deleted');
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.delete.success'));
     }
 
     public function search(SearchRequest $request)
     {
-        $input = $request->validated;
+        $input = $request->validated();
         $lottos = $this->lotteryService->search($input);
         return view('lottery.index', ['lottos' => $lottos]);
     }
@@ -79,7 +80,7 @@ class LotteryController extends Controller
         $input = $request->validated();
         // $input=$request->all();
         $this->lotteryService->crawl($input);
-        return redirect()->route('lottery.index')->with('success', 'Crawled');;
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.crawl.success'));;
     }
 
     public function uploadView()
@@ -92,8 +93,6 @@ class LotteryController extends Controller
         $request->validated();
         $file = $request->file('file');
         $this->lotteryService->fileUpload($file);
-        return redirect()->route('lottery.index');
+        return redirect()->route('lottery.index')->with('success', trans('messages.lottery.upload.success'));
     }
-
-
 }

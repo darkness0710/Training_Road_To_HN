@@ -24,8 +24,8 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'date',
-            'result' =>'numeric'
+            'date' => 'nullable|date:d-m-Y',
+            'result' =>'nullable|numeric'
         ];
     }
 }
