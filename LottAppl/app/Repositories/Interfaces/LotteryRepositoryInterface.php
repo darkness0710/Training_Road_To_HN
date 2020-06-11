@@ -4,18 +4,20 @@ namespace App\Repositories\Interfaces;
 use App\Lottery;
 interface LotteryRepositoryInterface
 {
-    public function getAll();
+    public function all();
 
-    public function findById($id);
+    public function find($attribute);
 
-    public function store($attribute);
+    public function create($attribute);
 
     public function update($id, array $attribute);
 
-    public function delete($id);
+    public function destroy($id);
 
-    public function crawl($attribute);
+    public function search ($input);
+    
+    // public function crawl($attribute);
 
-    public function fromCSV($file);
+    // public function fileUpload($file);
 
 }
