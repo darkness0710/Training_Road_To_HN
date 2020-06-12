@@ -12,9 +12,9 @@ class Lottery extends Model
         'date', 'result',
     ];
 
-    // protected $casts = [
-    //     'date' => 'date',
-    // ];
+    protected $casts = [
+        'result' => 'array',
+    ];
 
     public static function insertData($passingData)
     {
