@@ -8,43 +8,18 @@ use simplehtmldom\HtmlWeb;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
-class LotteryService implements LotteryServiceInterface
+class LotteryService extends BaseService implements LotteryServiceInterface
 {
-    protected $lotteryRepository;
+    // protected $lotteryRepository;
 
     public function __construct(LotteryRepositoryInterface $lotteryRepository)
     {
-        $this->lotteryRepository = $lotteryRepository;
-    }
-
-    public function all()
-    {
-        return $this->lotteryRepository->all();
-    }
-
-    public function create(array $input)
-    {
-        return $this->lotteryRepository->create($input);
-    }
-
-    public function find($input)
-    {
-        return $this->lotteryRepository->find($input);
-    }
-
-    public function update($id, array $input)
-    {
-        return $this->lotteryRepository->update($id, $input);
-    }
-
-    public function destroy($id)
-    {
-        return $this->lotteryRepository->destroy($id);
+        $this->setOriginalRepository($lotteryRepository);
     }
 
     public function search($input)
     {
-        return $this->lotteryRepository->search($input);
+        return $this->getOriginalRepository()->search($input);
     }
 
     public function crawl(array $attribute)
@@ -65,7 +40,7 @@ class LotteryService implements LotteryServiceInterface
             unset($html);
             $input_arr[] = $input;
         }
-            $this->lotteryRepository->massCreate($input_arr);
+        $this->getOriginalRepository()->massCreate($input_arr);
     }
 
     public function fileUpload($file)
@@ -91,6 +66,6 @@ class LotteryService implements LotteryServiceInterface
         }
         fclose($file);
 
-        $this->lotteryRepository->massCreate($input_arr);
+        $this->getOriginalRepository()->massCreate($input_arr);
     }
 }
