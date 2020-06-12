@@ -23,8 +23,6 @@ class LotteryRepository extends BaseRepository implements LotteryRepositoryInter
             // $lott = $this->model->insert([
             //     'date' => formatDateDB($attribute['date']),
             //     'result' => $attribute['result'],
-                $attribute['created_at'] = Carbon::now();
-                $attribute['updated_at'] = Carbon::now();
         //     ]);
         }
         return $lott = $this->model->insert($attributes);

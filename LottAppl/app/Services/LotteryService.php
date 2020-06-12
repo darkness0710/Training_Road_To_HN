@@ -36,6 +36,8 @@ class LotteryService extends BaseService implements LotteryServiceInterface
             $html = (new HtmlWeb())->load($url);
             $input['date'] = formatDateDB($date);
             $input['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+            $input['created_at'] = Carbon::now();
+            $input['updated_at'] = Carbon::now();
             $html->clear();
             unset($html);
             $input_arr[] = $input;
