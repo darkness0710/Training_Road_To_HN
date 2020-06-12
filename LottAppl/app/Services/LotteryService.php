@@ -40,6 +40,7 @@ class LotteryService extends BaseService implements LotteryServiceInterface
             unset($html);
             $input_arr[] = $input;
         }
+        // dd($input_arr);  
         $this->getOriginalRepository()->massCreate($input_arr);
     }
 

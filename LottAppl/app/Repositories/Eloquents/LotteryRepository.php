@@ -19,16 +19,19 @@ class LotteryRepository extends BaseRepository implements LotteryRepositoryInter
 
     public function massCreate($attributes)
     {
-        $now = Carbon::now();
-        $lott = $this->model->create(
-            ['date' =>  formatDateDB($attributes['date'])],
-            [['result' => $attributes['result']], ['created_at' => $now], ['updated_at' => $now]]
-        );
-        return $lott;
+        foreach ($attributes as $attribute) {
+            // $lott = $this->model->insert([
+            //     'date' => formatDateDB($attribute['date']),
+            //     'result' => $attribute['result'],
+                $attribute['created_at'] = Carbon::now();
+                $attribute['updated_at'] = Carbon::now();
+        //     ]);
+        }
+        return $lott = $this->model->insert($attributes);
     }
 
     public function search($input)
-    {   
+    {
         $date = formatDateDB($input['date']);
         $result = $input['result'];
 
