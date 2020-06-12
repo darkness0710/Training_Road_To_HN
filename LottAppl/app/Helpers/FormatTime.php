@@ -9,5 +9,5 @@ function formatDateView($date)
 
 function formatDateDB($date)
 {
-    return Carbon::parse($date)->format('Y-m-d');
+    return $date ? Carbon::parse($date)->format('Y-m-d') : NULL; //BEWARE!!! Carbon::parse($date) = now() if $date = NULL
 }

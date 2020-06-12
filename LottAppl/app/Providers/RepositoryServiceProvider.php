@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Models\Lottery;
-use App\Repositories\Interfaces\LotteryRepositoryInterface;
+use App\Repositories\Eloquents\BaseRepository;
+use App\Repositories\Interfaces\BaseRepositoryInterface;
 use App\Repositories\Eloquents\LotteryRepository;
+use App\Repositories\Interfaces\LotteryRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -16,7 +18,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(\App\Repositories\Interfaces\LotteryRepositoryInterface::class, \App\Repositories\Eloquents\LotteryRepository::class);
+        $this->app->bind(LotteryRepositoryInterface::class, LotteryRepository::class);
+        $this->app->bind(BaseRepositoryInterface::class, BaseRepository::class);
     }
 
     /**
