@@ -35,12 +35,21 @@ class LotteryService extends BaseService implements LotteryServiceInterface
             $url = config('custom.crawl.url') . $date->format('d-m-Y') . '.html';
             $html = (new HtmlWeb())->load($url);
             $input['date'] = formatDateDB($date);
-            $input['result'] = $html->find('span#mb_prizeDB_item0', 0)->plaintext;
+            foreach($html->find('div.box-ketqua tr') as $tr){
+                if(empty($tr->find('td.giai-txt', 0)->plaintext)){
+                    continue;
+                }
+                $item['col'] = $tr->find('td.giai-txt', 0)->plaintext;
+                $item['span'] = $tr->find('td.number', 0)->plaintext;
+                $result[] = $item;
+            }
+            $input['result'] = $result;
             $html->clear();
             unset($html);
             $input_arr[] = $input;
         }
-        $this->getOriginalRepository()->massCreate($input_arr);
+        dd($input_arr);
+        // $this->getOriginalRepository()->massCreate($input_arr);
     }
 
     public function fileUpload($file)

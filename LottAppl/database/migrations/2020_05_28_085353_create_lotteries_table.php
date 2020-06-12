@@ -17,7 +17,8 @@ class CreateLotteriesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->date('date');
-            $table->mediumText('result');
+            // $table->mediumText('result');
+            $table->json('result');
         });
     }
 
